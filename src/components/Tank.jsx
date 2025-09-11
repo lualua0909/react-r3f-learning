@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useAnimations, useGLTF } from "@react-three/drei";
+import { Float, useAnimations, useGLTF } from "@react-three/drei";
 
 export default function Tank({ position = [0, 0, 0], scrollProgress = 0 }) {
   const tankRef = useRef();
@@ -28,9 +28,11 @@ export default function Tank({ position = [0, 0, 0], scrollProgress = 0 }) {
   }, [actions, names, mixer]);
 
   return (
-    <group ref={tankRef} position={position} scale={[0.5, 0.5, 0.5]}>
-      <primitive object={scene} />
-    </group>
+    <Float>
+      <group ref={tankRef} position={position} scale={[0.5, 0.5, 0.5]}>
+        <primitive object={scene} />
+      </group>
+    </Float>
   );
 }
 
