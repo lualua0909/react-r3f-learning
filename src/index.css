@@ -1,50 +1,48 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
 @theme {
-  --color-nft-purple: #8B5CF6;
-  --color-nft-blue: #3B82F6;
-  --color-nft-pink: #EC4899;
-  --color-nft-cyan: #06B6D4;
-  --color-nft-dark: #0F0F23;
-  --color-nft-darker: #0A0A1A;
-  
+  --color-nft-purple: #8b5cf6;
+  --color-nft-blue: #3b82f6;
+  --color-nft-pink: #ec4899;
+  --color-nft-cyan: #06b6d4;
+  --color-nft-dark: #0f0f23;
+  --color-nft-darker: #0a0a1a;
+
   --font-family-sans: Inter, system-ui, sans-serif;
-  
+
   --animate-float: float 6s ease-in-out infinite;
   --animate-glow: glow 2s ease-in-out infinite alternate;
   --animate-spin-slow: spin 20s linear infinite;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 @keyframes glow {
-  0% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
-  100% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: var(--font-family-sans);
-  color: white;
-  overflow-x: hidden;
-}
-
-html {
-  scroll-behavior: smooth;
+  0% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.8);
+  }
 }
 
 .gradient-text {
-  background: linear-gradient(to right, var(--color-nft-purple), var(--color-nft-pink), var(--color-nft-cyan));
+  background: linear-gradient(
+    to right,
+    var(--color-nft-purple),
+    var(--color-nft-pink),
+    var(--color-nft-cyan)
+  );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -57,7 +55,11 @@ html {
 }
 
 .btn-primary {
-  background: linear-gradient(to right, var(--color-nft-purple), var(--color-nft-pink));
+  background: linear-gradient(
+    to right,
+    var(--color-nft-purple),
+    var(--color-nft-pink)
+  );
   color: white;
   padding: 12px 32px;
   border-radius: 9999px;

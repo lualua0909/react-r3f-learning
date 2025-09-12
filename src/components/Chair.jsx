@@ -7,15 +7,15 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export default function Model(props) {
+export default function Chair(props) {
   const group = useRef();
   const { nodes, materials } = useGLTF(
     "https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/chair-wood/model.gltf"
   );
-  
+
   const [targetX, setTargetX] = useState(0);
   const [newX, setNewX] = useState(2);
-  
+
   // Use refs for performance optimization - no re-renders
   const currentX = useRef(0);
 
@@ -41,7 +41,7 @@ export default function Model(props) {
         receiveShadow
         geometry={nodes.chair.geometry}
         material={materials["BrownDark.052"]}
-        onClick={handleClick}  
+        onClick={handleClick}
       />
     </group>
   );

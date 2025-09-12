@@ -1,128 +1,160 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   Environment,
   OrbitControls,
+  Stage,
   useHelper,
+  useKeyboardControls,
   useTexture
 } from "@react-three/drei";
 import { useControls } from "leva";
-import { DirectionalLightHelper } from "three";
+import { DirectionalLightHelper, Vector3 } from "three";
 import Tank from "./components/Tank";
 import ArtRoom from "./components/ArtRoom";
 import Chair from "./components/Chair";
 import Spaceship from "./components/Spaceship";
 import Astronaut from "./components/Astronaut";
+import { BallCollider, Physics, RigidBody } from "@react-three/rapier";
+import { KeyboardControls } from "@react-three/drei";
+import Car1 from "./components/Car1";
+import ProductPage from "./ProductPage";
+
+export const Controls = {
+  forward: "forward",
+  back: "back",
+  left: "left",
+  right: "right",
+  jump: "jump"
+};
 
 function App() {
   const astronautRef = useRef();
   const pts = [
     [-7, 0, -7],
-    [ 7, 0, -7],
-    [ 7, 0,  7],
-    [-7, 0,  7],
+    [7, 0, -7],
+    [7, 0, 7],
+    [-7, 0, 7]
   ];
+
+  const map = useMemo(
+    () => [
+      { name: Controls.forward, keys: ["ArrowUp", "KeyW"] },
+      { name: Controls.back, keys: ["ArrowDown", "KeyS"] },
+      { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
+      { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
+      { name: Controls.jump, keys: ["Space"] }
+    ],
+    []
+  );
 
   return (
     <div className="min-h-screen">
       {/* Background Canvas */}
-      <div className="flex gap-2 justify-center items-center absolute top-4 left-4 z-10 bg-black/20 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-        <button 
-          onClick={() => astronautRef.current?.play("CharacterArmature|Run")}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
-        >
-          Play Move
-        </button>
-        <button 
-          onClick={() => astronautRef.current?.stopAll()}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors"
-        >
-          Stop All
-        </button>
+      <div className="flex gap-2 justify-center items-center absolute inset-0 z-10 bg-gray-100 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+        <ProductPage />
       </div>
-      <div className="fixed inset-0 z-0">
+      {/* <div className="fixed inset-0 z-0">
         <Canvas camera={{ position: [2, 2, 2] }} shadows>
-          <ArtRoom />
-          <Tank />
-          <Chair position={[3, 0, 3]} />
-          <Spaceship position={[-3, 1, 3]} />
-          <AnimatedBox />
-          <Astronaut ref={astronautRef} position={[0, 0, 0]} />
-          <PathDebug points={pts} />
-          <axesHelper args={[5]} />
-          {/* <gridHelper args={[10, 10]} /> */}
-          <Environment preset="apartment" />
-          <OrbitControls
-            enablePan={false}
-            maxPolarAngle={Math.PI / 2}
-            minAzimuthAngle={-Math.PI / 2}
-            maxAzimuthAngle={Math.PI / 2}
-            minDistance={3}
-            maxDistance={10}
-          />
+          <KeyboardControls map={map}>
+            <Stage intensity={0.4} preset={"upfront"} environment={"studio"}>
+              <Car1 />
+            </Stage>
+            <OrbitControls
+              enablePan={false}
+              maxPolarAngle={Math.PI / 2}
+              minAzimuthAngle={-Math.PI / 2}
+              maxAzimuthAngle={Math.PI / 2}
+              minDistance={3}
+              maxDistance={10}
+            />
+            <Physics debug gravity={[0, -50, 0]}>
+              <RigidBody colliders="cuboid">
+                <Tank />
+              </RigidBody>
+              <Chair position={[3, 0, 3]} />
+
+              <ArtRoom />
+              <Spaceship position={[-3, 1, 3]} />
+              <AnimatedBox />
+
+              <Astronaut ref={astronautRef} position={[0, 0, 0]} />
+              <PathDebug points={pts} />
+              <axesHelper args={[5]} />
+              <Environment preset="apartment" />
+            </Physics>
+          </KeyboardControls>
         </Canvas>
-      </div>
+      </div> */}
     </div>
   );
 }
 
 export default App;
 
+const MOVEMENT_SPEED = 5;
+const JUMP_FORCE = 8;
+
 const AnimatedBox = () => {
-  const lightRef = useRef();
   const [wireframe, setWirerame] = useState(false);
-  // Gắn helper vào light
-  useHelper(lightRef, DirectionalLightHelper, 1, "hotpink");
 
-  // Tạo UI điều khiển bằng leva
-  const { intensity, x, y, z } = useControls("Directional Light", {
-    intensity: { value: 1, min: 0, max: 5, step: 0.1 },
-    x: { value: 5, min: -10, max: 10 },
-    y: { value: 5, min: -10, max: 10 },
-    z: { value: 5, min: -10, max: 10 }
-  });
-
-  const { speed } = useControls({
-    speed: {
-      value: 0.01,
-      min: 0,
-      max: 10,
-      step: 0.01
-    },
-    size: {
-      value: 10,
-      min: 0,
-      max: 10,
-      step: 0.1
-    }
-  });
-
-  const boxRef = useRef();
+  const [, get] = useKeyboardControls();
+  const rb = useRef();
+  const inTheAir = useRef(false);
+  const vel = new Vector3();
 
   useFrame(() => {
-    if (boxRef.current) {
-      boxRef.current.rotation.x += speed;
-      boxRef.current.rotation.y += speed;
+    vel.x = 0;
+    vel.y = 0;
+    vel.z = 0;
+    const curVel = rb.current.linvel();
+    if (get()[Controls.forward]) {
+      vel.z -= MOVEMENT_SPEED;
+    }
+    if (get()[Controls.back]) {
+      vel.z += MOVEMENT_SPEED;
+    }
+    if (get()[Controls.left]) {
+      vel.x -= MOVEMENT_SPEED;
+    }
+    if (get()[Controls.right]) {
+      vel.x += MOVEMENT_SPEED;
+    }
+    if (get()[Controls.jump] && !inTheAir.current) {
+      vel.y += JUMP_FORCE;
+      inTheAir.current = true;
+    } else {
+      vel.y = curVel.y;
+    }
+    rb.current.setLinvel(vel, true);
+
+    if (curVel.y <= 0 && vel.y > 0) {
+      inTheAir.current = false;
     }
   });
 
   const texture = useTexture("./src/assets/tt.jpg");
+
   return (
-    <mesh
-      ref={boxRef}
-      castShadow
-      position={[2, 1, 1]}
-      onClick={() => setWirerame(!wireframe)}
+    <RigidBody
+      ref={rb}
+      name="box"
+      lockRotations
+      onCollisionEnter={({ other }) => {
+        if (other.rigidBodyObject.name === "ground") {
+          inTheAir.current = false;
+        }
+      }}
     >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial wireframe={wireframe} map={texture} />
-      <directionalLight
-        ref={lightRef}
-        position={[5, 5, 5]}
-        intensity={intensity}
+      <mesh
         castShadow
-      />
-    </mesh>
+        position={[2, 1, 1]}
+        onClick={() => setWirerame(!wireframe)}
+      >
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial wireframe={wireframe} map={texture} />
+      </mesh>
+    </RigidBody>
   );
 };
 
