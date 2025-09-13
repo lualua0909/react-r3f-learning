@@ -6,7 +6,7 @@ import {
   Stage,
   useHelper,
   useKeyboardControls,
-  useTexture
+  useTexture,
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { DirectionalLightHelper, Vector3 } from "three";
@@ -25,7 +25,7 @@ export const Controls = {
   back: "back",
   left: "left",
   right: "right",
-  jump: "jump"
+  jump: "jump",
 };
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
     [-7, 0, -7],
     [7, 0, -7],
     [7, 0, 7],
-    [-7, 0, 7]
+    [-7, 0, 7],
   ];
 
   const map = useMemo(
@@ -43,17 +43,15 @@ function App() {
       { name: Controls.back, keys: ["ArrowDown", "KeyS"] },
       { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
       { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
-      { name: Controls.jump, keys: ["Space"] }
+      { name: Controls.jump, keys: ["Space"] },
     ],
     []
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="">
       {/* Background Canvas */}
-      <div className="flex gap-2 justify-center items-center absolute inset-0 z-10 bg-gray-100 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-        <ProductPage />
-      </div>
+      <ProductPage />
       {/* <div className="fixed inset-0 z-0">
         <Canvas camera={{ position: [2, 2, 2] }} shadows>
           <KeyboardControls map={map}>
