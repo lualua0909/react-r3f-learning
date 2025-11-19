@@ -6,9 +6,9 @@ import { OrbitControls } from "@react-three/drei";
 import Car4 from "./components/Car4";
 import Car5 from "./components/Car5";
 import Tree1 from "./components/Tree1";
-import Tree2 from "./components/Tree2";
+// import Tree2 from "./components/Tree2";
 import Car3 from "./components/Car3";
-import Car1 from "./components/Car1";
+import Car1 from "./components/Car2";
 
 export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -16,7 +16,7 @@ export default function ProductPage() {
   const [selectedTree, setSelectedTree] = useState(0);
   const [selectedComponent, setSelectedComponent] = useState(() => Car1);
 
-  const treeObjects = [null, Tree1, Tree2];
+  const treeObjects = [null, Tree1, null];
 
   const productImages = [
     {
@@ -26,7 +26,7 @@ export default function ProductPage() {
       price: 120000,
       carName: "Xe Cảnh Sát",
       carDescription:
-        "Chiếc xe cảnh sát mạnh mẽ với thiết kế hầm hố, đèn tín hiệu nổi bật và khả năng di chuyển linh hoạt. Hoàn hảo cho những ai yêu thích tốc độ và phong cách quyền lực.",
+        "Chiếc xe cảnh sát mạnh mẽ với thiết kế hầm hố, đèn tín hiệu nổi bật và khả năng di chuyển linh hoạt. Hoàn hảo cho những ai yêu thích tốc độ và phong cách quyền lực."
     },
     {
       component: Car3,
@@ -35,7 +35,7 @@ export default function ProductPage() {
       price: 223456,
       carName: "Xe Thể Thao",
       carDescription:
-        "Mẫu xe thể thao sang trọng với đường nét khí động học, động cơ mạnh mẽ và khả năng tăng tốc vượt trội. Mang lại trải nghiệm lái đầy phấn khích và cá tính.",
+        "Mẫu xe thể thao sang trọng với đường nét khí động học, động cơ mạnh mẽ và khả năng tăng tốc vượt trội. Mang lại trải nghiệm lái đầy phấn khích và cá tính."
     },
     {
       component: Car4,
@@ -44,7 +44,7 @@ export default function ProductPage() {
       price: 123678,
       carName: "Xe Tesla",
       carDescription:
-        "Xe điện thông minh với công nghệ tiên tiến, thân thiện môi trường và khả năng vận hành êm ái. Lựa chọn hoàn hảo cho tương lai xanh và hiện đại.",
+        "Xe điện thông minh với công nghệ tiên tiến, thân thiện môi trường và khả năng vận hành êm ái. Lựa chọn hoàn hảo cho tương lai xanh và hiện đại."
     },
     {
       component: Car5,
@@ -53,8 +53,8 @@ export default function ProductPage() {
       price: 123490,
       carName: "Tàu Vũ Trụ",
       carDescription:
-        "Phương tiện viễn tưởng mang phong cách tương lai, thiết kế ấn tượng và cảm giác như đang bước vào thế giới không gian. Dành cho những ai đam mê khám phá vũ trụ.",
-    },
+        "Phương tiện viễn tưởng mang phong cách tương lai, thiết kế ấn tượng và cảm giác như đang bước vào thế giới không gian. Dành cho những ai đam mê khám phá vũ trụ."
+    }
   ];
 
   const colors = [
@@ -63,7 +63,7 @@ export default function ProductPage() {
     "#EC4899", // Pink
     "#06B6D4", // Cyan
     "#10B981", // Emerald
-    "#F59E0B", // Amber
+    "#F59E0B" // Amber
   ];
 
   return (
@@ -100,7 +100,7 @@ export default function ProductPage() {
                           <group position={[0, 0, 0]}>
                             {React.createElement(selectedComponent, {
                               currentColor,
-                              position: [0, 0, 0],
+                              position: [0, 0, 0]
                             })}
                           </group>
 
@@ -108,7 +108,7 @@ export default function ProductPage() {
                             React.createElement(treeObjects[selectedTree], {
                               currentColor,
                               position: [-2, 0, 0],
-                              scale: [0.1, 0.1, 0.1],
+                              scale: [0.1, 0.1, 0.1]
                             })}
                         </Float>
                       </Stage>
@@ -160,7 +160,7 @@ export default function ProductPage() {
               <span className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
-                  currency: "USD",
+                  currency: "USD"
                 }).format(productImages[selectedImage].price)}
               </span>
             </div>
