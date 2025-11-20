@@ -19,6 +19,8 @@ import { BallCollider, Physics, RigidBody } from "@react-three/rapier";
 import { KeyboardControls } from "@react-three/drei";
 import Car1 from "./components/Car1";
 import ProductPage from "./ProductPage";
+import NewsPage from "./NewsPage";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Controls = {
   forward: "forward",
@@ -29,6 +31,7 @@ export const Controls = {
 };
 
 function App() {
+  const [currentPage, setCurrentPage] = useState("products");
   const astronautRef = useRef();
   const pts = [
     [-7, 0, -7],
@@ -49,9 +52,78 @@ function App() {
   );
 
   return (
-    <div className="">
-      {/* Background Canvas */}
-      <ProductPage />
+    <div className="relative">
+      {/* Navigation Bar */}
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="fixed top-0 left-0 right-0 z-50 glass-panel backdrop-blur-xl bg-white/20 border-b border-white/30 shadow-lg"
+      >
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <motion.h1
+              whileHover={{ scale: 1.05 }}
+              className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent cursor-pointer"
+              onClick={() => setCurrentPage("products")}
+            >
+              NFT Collection
+            </motion.h1>
+            <div className="flex items-center space-x-4">
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setCurrentPage("products")}
+                className={`px-6 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                  currentPage === "products"
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
+                    : "bg-white/10 text-gray-700 hover:bg-white/20 backdrop-blur-sm border border-white/30"
+                }`}
+              >
+                Sản Phẩm
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setCurrentPage("news")}
+                className={`px-6 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                  currentPage === "news"
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
+                    : "bg-white/10 text-gray-700 hover:bg-white/20 backdrop-blur-sm border border-white/30"
+                }`}
+              >
+                Tin Tức
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* Page Content */}
+      <div className="pt-20">
+        <AnimatePresence mode="wait">
+          {currentPage === "products" ? (
+            <motion.div
+              key="products"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ProductPage />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="news"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <NewsPage />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
       {/* <div className="fixed inset-0 z-0">
         <Canvas camera={{ position: [2, 2, 2] }} shadows>
           <KeyboardControls map={map}>

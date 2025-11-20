@@ -1,6 +1,32 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+/* Google Sans Font Face - Add font files to /public/fonts/ if you have them */
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSans-Regular.woff2') format('woff2'),
+       url('/fonts/GoogleSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSans-Medium.woff2') format('woff2'),
+       url('/fonts/GoogleSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/fonts/GoogleSans-Bold.woff2') format('woff2'),
+       url('/fonts/GoogleSans-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
   --color-nft-purple: #8b5cf6;
@@ -10,7 +36,7 @@
   --color-nft-dark: #0f0f23;
   --color-nft-darker: #0a0a1a;
 
-  --font-family-sans: Inter, system-ui, sans-serif;
+  --font-family-sans: "Google Sans", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 
   --animate-float: float 6s ease-in-out infinite;
   --animate-glow: glow 2s ease-in-out infinite alternate;
@@ -257,4 +283,115 @@
 
 .transform-3d:hover {
   transform: rotateY(5deg) rotateX(5deg);
+}
+
+/* Apply Google Sans font globally */
+body {
+  font-family: "Google Sans", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: inherit;
+}
+
+/* Modern Custom Scrollbar Styles */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.8) 0%,
+    rgba(236, 72, 153, 0.8) 100%
+  );
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 1) 0%,
+    rgba(236, 72, 153, 1) 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    180deg,
+    rgba(124, 58, 237, 1) 0%,
+    rgba(219, 39, 119, 1) 100%
+  );
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.8) rgba(255, 255, 255, 0.1);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for modal and specific containers */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(243, 244, 246, 0.5);
+  border-radius: 10px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.6) 0%,
+    rgba(236, 72, 153, 0.6) 100%
+  );
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.9) 0%,
+    rgba(236, 72, 153, 0.9) 100%
+  );
+}
+
+/* Thin scrollbar variant */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
 }
