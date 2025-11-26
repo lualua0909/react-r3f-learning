@@ -10,12 +10,14 @@ import Tree1 from "./components/Tree1";
 // import Tree2 from "./components/Tree2";
 import Car3 from "./components/Car3";
 import Car1 from "./components/Car2";
+import ARViewer from "./components/ARViewer";
 
 export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [currentColor, setCurrentColor] = useState("#8B5CF6");
   const [selectedTree, setSelectedTree] = useState(0);
   const [selectedComponent, setSelectedComponent] = useState(() => Car1);
+  const [arMode, setArMode] = useState(false);
   const { scrollYProgress } = useScroll();
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
@@ -104,54 +106,79 @@ export default function ProductPage() {
             {/* Main 3D Viewer */}
             <div className="relative">
               <div className="glass-panel rounded-3xl p-6 backdrop-blur-xl bg-white/20 border border-white/30 shadow-2xl">
+                {/* AR Mode Toggle Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setArMode(!arMode)}
+                  className="absolute top-4 right-4 z-10 px-4 py-2 rounded-xl font-semibold transition-all duration-300 backdrop-blur-sm border border-white/30 shadow-lg"
+                  style={{
+                    backgroundColor: arMode 
+                      ? "rgba(147, 51, 234, 0.8)" 
+                      : "rgba(255, 255, 255, 0.2)",
+                    color: arMode ? "white" : "rgba(107, 114, 128, 1)"
+                  }}
+                >
+                  {arMode ? "Thoát AR" : "Chế độ AR"}
+                </motion.button>
+                
                 <AnimatePresence mode="wait">
                   <motion.div 
-                    key={selectedImage}
+                    key={`${selectedImage}-${arMode}`}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.5 }}
                     className="h-[80vh] flex items-center justify-center"
                   >
-                  <Canvas>
-                    <Suspense fallback={null}>
-                      <Stage
-                        preset="upfront"
-                        environment="sunset"
-                        intensity={0.6}
-                        adjustCamera
-                        shadows={false}
-                      >
-                        <Float
-                          speed={2}
-                          rotationIntensity={0.5}
-                          floatIntensity={0.5}
-                        >
-                          <group position={[0, 0, 0]}>
-                            {React.createElement(selectedComponent, {
-                              currentColor,
-                              position: [0, 0, 0]
-                            })}
-                          </group>
-
-                          {treeObjects[selectedTree] &&
-                            React.createElement(treeObjects[selectedTree], {
-                              currentColor,
-                              position: [-2, 0, 0],
-                              scale: [0.1, 0.1, 0.1]
-                            })}
-                        </Float>
-                      </Stage>
-
-                      <OrbitControls
-                        enablePan={false}
-                        enableZoom={false}
-                        maxPolarAngle={Math.PI / 2}
-                        minAzimuthAngle={-Math.PI / 2}
-                        maxAzimuthAngle={Math.PI / 2}
+                    {arMode ? (
+                      <ARViewer
+                        currentColor={currentColor}
+                        selectedComponent={selectedComponent}
+                        treeObjects={treeObjects}
+                        selectedTree={selectedTree}
                       />
-                    </Suspense>
-                  </Canvas>
+                    ) : (
+                      <Canvas>
+                        <Suspense fallback={null}>
+                          <Stage
+                            preset="upfront"
+                            environment="sunset"
+                            intensity={0.6}
+                            adjustCamera
+                            shadows={false}
+                          >
+                            <Float
+                              speed={2}
+                              rotationIntensity={0.5}
+                              floatIntensity={0.5}
+                            >
+                              <group position={[0, 0, 0]}>
+                                {React.createElement(selectedComponent, {
+                                  currentColor,
+                                  position: [0, 0, 0]
+                                })}
+                              </group>
+
+                              {treeObjects[selectedTree] &&
+                                React.createElement(treeObjects[selectedTree], {
+                                  currentColor,
+                                  position: [-2, 0, 0],
+                                  scale: [0.1, 0.1, 0.1]
+                                })}
+                            </Float>
+                          </Stage>
+
+                          <OrbitControls
+                            enablePan={false}
+                            enableZoom={false}
+                            maxPolarAngle={Math.PI / 2}
+                            minAzimuthAngle={-Math.PI / 2}
+                            maxAzimuthAngle={Math.PI / 2}
+                          />
+                        </Suspense>
+                      </Canvas>
+                    )}
                   </motion.div>
                 </AnimatePresence>
               </div>
